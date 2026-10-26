@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Unidades - Apéndice G</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 flex flex-col justify-between">
+
+    <!-- Header / Navbar Top -->
+    <header class="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 text-white shadow-lg">
+        <div class="max-w-5xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <!-- Logo TecNM (Izquierda) -->
+            <div class="flex-shrink-0 bg-white p-2 rounded-xl shadow-md">
+                <img src="logo-tecnm.png" alt="Logo TecNM" class="h-12 md:h-14 object-contain">
+            </div>
+
+            <!-- Títulos y Nombre al Centro -->
+            <div class="text-center flex-grow px-2">
+                <div class="inline-flex items-center justify-center space-x-3 mb-1">
+                    <svg class="w-8 h-8 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                    </svg>
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">Calculadora de Unidades</h1>
+                </div>
+                <p class="text-emerald-100 text-xs md:text-sm font-light max-w-xl mx-auto">
+                    Basada estrictamente en el <span class="font-semibold text-white">Apéndice G (Factores de Conversión)</span> del libro <span class="italic">Física General de Resnick, Halliday y Krane</span>.
+                </p>
+                <!-- Tu Nombre -->
+                <p class="text-emerald-200 text-sm font-semibold mt-1.5 tracking-wide">
+                    Andrea Millay González García | 1°A | Ing.Informática
+                </p>
+            </div>
+
+            <!-- Logo ITVO (Derecha) -->
+            <div class="flex-shrink-0 bg-white p-2 rounded-xl shadow-md">
+                <img src="logo-ITVO.png" alt="Logo ITVO" class="h-12 md:h-14 object-contain">
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto px-4 py-8 w-full flex-grow">
+        
+        <!-- Calculator Card -->
+        <div class="bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 md:p-8 mb-8 transition-all duration-300">
+            
+            <!-- Category Selector Section -->
+            <div class="mb-6">
+                <label for="categoria" class="block text-sm font-semibold text-emerald-900 mb-2 uppercase tracking-wider">
+                    1. Selecciona la Magnitud / Categoría
+                </label>
+                <div class="relative">
+                    <select id="categoria" class="w-full bg-emerald-50/50 border border-emerald-300 text-slate-800 text-base font-medium rounded-xl p-3.5 pr-10 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition appearance-none cursor-pointer">
+                        <!-- Categorías inyectadas dinámicamente -->
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-emerald-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+                
+                <!-- Input Value -->
+                <div class="col-span-1 md:col-span-2">
+                    <label for="valorIngresado" class="block text-sm font-semibold text-emerald-900 mb-2 uppercase tracking-wider">
+                        2. Ingrese el valor numérico
+                    </label>
+                    <div class="relative">
+                        <input type="number" id="valorIngresado" value="1" step="any" placeholder="Ej. 100" class="w-full text-lg font-medium bg-white border border-slate-300 text-slate-900 rounded-xl p-3.5 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none shadow-sm transition">
+                    </div>
+                </div>
+
+                <!-- Source Unit Dropdown -->
+                <div>
+                    <label for="unidadOrigen" class="block text-sm font-semibold text-emerald-900 mb-2 uppercase tracking-wider">
+                        3. De unidad (Origen)
+                    </label>
+                    <div class="relative">
+                        <select id="unidadOrigen" class="w-full bg-white border border-slate-300 text-slate-800 rounded-xl p-3.5 pr-10 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition appearance-none cursor-pointer shadow-sm">
+                            <!-- Inyectado dinámicamente -->
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Target Unit Dropdown -->
+                <div>
+                    <label for="unidadDestino" class="block text-sm font-semibold text-emerald-900 mb-2 uppercase tracking-wider">
+                        4. A unidad (Destino)
+                    </label>
+                    <div class="relative">
+                        <select id="unidadDestino" class="w-full bg-white border border-slate-300 text-slate-800 rounded-xl p-3.5 pr-10 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition appearance-none cursor-pointer shadow-sm">
+                            <!-- Inyectado dinámicamente -->
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Action Buttons (Intercambiar y Limpiar) -->
+            <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                <button id="btnIntercambiar" type="button" class="flex-1 inline-flex justify-center items-center px-5 py-3.5 border border-emerald-600 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 font-semibold rounded-xl transition duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path></svg>
+                    Intercambiar Unidades
+                </button>
+                <button id="btnLimpiar" type="button" class="sm:w-auto inline-flex justify-center items-center px-5 py-3.5 border border-slate-300 text-slate-700 bg-white hover:bg-slate-100 font-semibold rounded-xl transition duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <svg class="w-5 h-5 mr-2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    Limpiar
+                </button>
+            </div>
+
+            <!-- Result Display Box -->
+            <div class="mt-8 bg-gradient-to-br from-emerald-900 to-teal-950 text-white rounded-2xl p-6 shadow-inner relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="text-xs uppercase tracking-widest text-emerald-300 font-semibold mb-1">Resultado de la Conversión</div>
+                
+                <div id="pantallaResultado" class="text-2xl sm:text-3xl font-bold tracking-tight text-white my-2 break-all">
+                    0.00
+                </div>
+
+                <div id="detallesFormula" class="text-xs sm:text-sm text-emerald-200/90 font-light border-t border-emerald-800/80 pt-3 mt-3 flex items-center">
+                    <svg class="w-4 h-4 mr-1.5 flex-shrink-0 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>Factor del Apéndice G aplicado</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Information / Help Accordion -->
+        <div class="bg-emerald-50/70 border border-emerald-200/60 rounded-xl p-5 text-emerald-950 text-sm">
+            <h3 class="font-semibold text-emerald-900 flex items-center mb-2">
+                <svg class="w-5 h-5 mr-1.5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                Información de referencia del Apéndice G
+            </h3>
+            <p class="leading-relaxed text-slate-700">
+                Esta calculadora implementa todos los factores de conversión de las tablas de <strong>Ángulo Plano, Ángulo Sólido, Longitud, Área, Volumen, Masa, Tiempo, Velocidad, Fuerza, Energía / Trabajo / Calor, Presión, Potencia, Flujo Magnético y Campo Magnético</strong> expresados en notación estándar y científica.
+            </p>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 text-center px-4">
+        <p>Física General de Resnick • Apéndice G: Factores de Conversión</p>
+    </footer>
+
+    <!-- JavaScript Base Logic -->
+    <script>
+        const datosApendiceG = {
+            "angulo_plano": {
+                nombre: "Ángulo Plano",
+                base: "rad",
+                unidades: {
+                    "deg": { nombre: "Grado (°)", factor: 0.017453292519943295 },
+                    "min": { nombre: "Minuto (')", factor: 0.0002908882086657216 },
+                    "sec": { nombre: "Segundo ('')", factor: 0.00000484813681109536 },
+                    "rad": { nombre: "Radian (rad)", factor: 1.0 },
+                    "rev": { nombre: "Revolución (rev)", factor: 6.283185307179586 }
+                }
+            },
+            "longitud": {
+                nombre: "Longitud",
+                base: "m",
+                unidades: {
+                    "m": { nombre: "Metro (m)", factor: 1.0 },
+                    "cm": { nombre: "Centímetro (cm)", factor: 1e-2 },
+                    "km": { nombre: "Kilómetro (km)", factor: 1000.0 },
+                    "in": { nombre: "Pulgada (in)", factor: 0.0254 },
+                    "ft": { nombre: "Pie (ft)", factor: 0.3048 },
+                    "mi": { nombre: "Milla (mi)", factor: 1609.344 },
+                    "angstrom": { nombre: "Angström (Å)", factor: 1e-10 },
+                    "ly": { nombre: "Año-luz", factor: 9.460e12 * 1000 },
+                    "parsec": { nombre: "Parsec", factor: 3.084e13 * 1000 },
+                    "fathom": { nombre: "Fathom", factor: 6 * 0.3048 },
+                    "yarda": { nombre: "Yarda (yd)", factor: 3 * 0.3048 },
+                    "rod": { nombre: "Rod", factor: 16.5 * 0.3048 },
+                    "mil": { nombre: "Mil", factor: 1e-3 * 0.0254 },
+                    "nm": { nombre: "Nanómetro (nm)", factor: 1e-9 },
+                    "nmi": { nombre: "Milla Náutica", factor: 1852.0 },
+                    "bohr": { nombre: "Radio de Bohr", factor: 5.292e-11 }
+                }
+            },
+            "area": {
+                nombre: "Área",
+                base: "m2",
+                unidades: {
+                    "m2": { nombre: "Metro cuadrado (m²)", factor: 1.0 },
+                    "cm2": { nombre: "Centímetro cuadrado (cm²)", factor: 1e-4 },
+                    "ft2": { nombre: "Pie cuadrado (ft²)", factor: 0.09290304 },
+                    "in2": { nombre: "Pulgada cuadrada (in²)", factor: 0.00064516 },
+                    "mi2": { nombre: "Milla cuadrada (mi²)", factor: 2589988.11 },
+                    "acre": { nombre: "Acre", factor: 4046.8564224 },
+                    "hectarea": { nombre: "Hectárea (ha)", factor: 10000.0 },
+                    "barnio": { nombre: "Barnio", factor: 1e-28 }
+                }
+            },
+            "volumen": {
+                nombre: "Volumen",
+                base: "m3",
+                unidades: {
+                    "m3": { nombre: "Metro cúbico (m³)", factor: 1.0 },
+                    "cm3": { nombre: "Centímetro cúbico (cm³)", factor: 1e-6 },
+                    "L": { nombre: "Litro (L)", factor: 1e-3 },
+                    "ft3": { nombre: "Pie cúbico (ft³)", factor: 0.028316846592 },
+                    "in3": { nombre: "Pulgada cúbica (in³)", factor: 0.000016387064 },
+                    "gal_us": { nombre: "Galón fluido U.S.", factor: 0.003785411784 },
+                    "gal_imp": { nombre: "Galón imperial británico", factor: 0.00454609 }
+                }
+            },
+            "masa": {
+                nombre: "Masa",
+                base: "kg",
+                unidades: {
+                    "kg": { nombre: "Kilogramo (kg)", factor: 1.0 },
+                    "g": { nombre: "Gramo (g)", factor: 1e-3 },
+                    "slug": { nombre: "Slug", factor: 14.5939029 },
+                    "uma": { nombre: "Unidad de masa atómica (u)", factor: 1.660538921e-27 },
+                    "oz": { nombre: "Onza (oz)", factor: 0.028349523125 },
+                    "lb": { nombre: "Libra (lb)", factor: 0.45359237 },
+                    "ton": { nombre: "Tonelada", factor: 907.18474 }
+                }
+            },
+            "tiempo": {
+                nombre: "Tiempo",
+                base: "s",
+                unidades: {
+                    "s": { nombre: "Segundo (s)", factor: 1.0 },
+                    "min": { nombre: "Minuto (min)", factor: 60.0 },
+                    "h": { nombre: "Hora (h)", factor: 3600.0 },
+                    "d": { nombre: "Día (d)", factor: 86400.0 },
+                    "y": { nombre: "Año (y)", factor: 31557600.0 }
+                }
+            },
+            "velocidad": {
+                nombre: "Velocidad",
+                base: "ms",
+                unidades: {
+                    "ms": { nombre: "Metro por segundo (m/s)", factor: 1.0 },
+                    "fts": { nombre: "Pie por segundo (ft/s)", factor: 0.3048 },
+                    "kmh": { nombre: "Kilómetro por hora (km/h)", factor: 0.2777777777777778 },
+                    "mih": { nombre: "Milla por hora (mi/h)", factor: 0.44704 },
+                    "cms": { nombre: "Centímetro por segundo (cm/s)", factor: 0.01 }
+                }
+            },
+            "fuerza": {
+                nombre: "Fuerza",
+                base: "N",
+                unidades: {
+                    "N": { nombre: "Newton (N)", factor: 1.0 },
+                    "dina": { nombre: "Dina", factor: 1e-5 },
+                    "lb": { nombre: "Libra de fuerza (lb)", factor: 4.4482216152605 },
+                    "pdl": { nombre: "Poundal (pdl)", factor: 0.138254954376 },
+                    "gf": { nombre: "Gramo-fuerza (gf)", factor: 0.00980665 },
+                    "kgf": { nombre: "Kilogramo-fuerza (kgf)", factor: 9.80665 }
+                }
+            },
+            "energia": {
+                nombre: "Energía, Trabajo, Calor",
+                base: "J",
+                unidades: {
+                    "J": { nombre: "Joule (J)", factor: 1.0 },
+                    "Btu": { nombre: "Unidad térmica británica (Btu)", factor: 1055.05585262 },
+                    "erg": { nombre: "Erg", factor: 1e-7 },
+                    "ftlb": { nombre: "Pie-libra (ft·lb)", factor: 1.3558179483314004 },
+                    "hph": { nombre: "Caballo de fuerza-hora (hp·h)", factor: 2684519.5377 },
+                    "cal": { nombre: "Caloría (cal)", factor: 4.1868 },
+                    "kWh": { nombre: "Kilowatt-hora (kW·h)", factor: 3600000.0 },
+                    "eV": { nombre: "Electrónvolt (eV)", factor: 1.602176634e-19 },
+                    "MeV": { nombre: "Megaelectrónvolt (MeV)", factor: 1.602176634e-13 },
+                    "kg_eq": { nombre: "Kilogramo (equivalente de masa)", factor: 8.987551787368176e16 }
+                }
+            },
+            "presion": {
+                nombre: "Presión",
+                base: "Pa",
+                unidades: {
+                    "Pa": { nombre: "Pascal (Pa)", factor: 1.0 },
+                    "atm": { nombre: "Atmósfera (atm)", factor: 101325.0 },
+                    "dinacm2": { nombre: "Dina/cm²", factor: 0.1 },
+                    "inH2O": { nombre: "Pulgada de agua (in H₂O)", factor: 249.08891 },
+                    "cmHg": { nombre: "cm de mercurio (cm Hg)", factor: 1333.22387 },
+                    "psi": { nombre: "Libra/in² (psi)", factor: 6894.757293168 },
+                    "lbft2": { nombre: "Libra/ft²", factor: 47.8802589803 }
+                }
+            },
+            "potencia": {
+                nombre: "Potencia",
+                base: "W",
+                unidades: {
+                    "W": { nombre: "Watt (W)", factor: 1.0 },
+                    "Btuh": { nombre: "Btu/h", factor: 0.29307107 },
+                    "ftlbs": { nombre: "ft·lb/s", factor: 1.35581794833 },
+                    "hp": { nombre: "Caballo de fuerza (hp)", factor: 745.6998715822702 },
+                    "cals": { nombre: "cal/s", factor: 4.1868 },
+                    "kW": { nombre: "Kilowatt (kW)", factor: 1000.0 }
+                }
+            },
+            "flujo_magnetico": {
+                nombre: "Flujo Magnético",
+                base: "Wb",
+                unidades: {
+                    "Wb": { nombre: "Weber (Wb)", factor: 1.0 },
+                    "maxwell": { nombre: "Maxwell", factor: 1e-8 }
+                }
+            },
+            "campo_magnetico": {
+                nombre: "Campo Magnético",
+                base: "T",
+                unidades: {
+                    "T": { nombre: "Tesla (T)", factor: 1.0 },
+                    "gauss": { nombre: "Gauss", factor: 1e-4 },
+                    "milligauss": { nombre: "Milligauss", factor: 1e-7 }
+                }
+            }
+        };
+
+        const selectCategoria = document.getElementById('categoria');
+        const inputValor = document.getElementById('valorIngresado');
+        const selectOrigen = document.getElementById('unidadOrigen');
+        const selectDestino = document.getElementById('unidadDestino');
+        const pantallaResultado = document.getElementById('pantallaResultado');
+        const detallesFormula = document.getElementById('detallesFormula');
+        const btnIntercambiar = document.getElementById('btnIntercambiar');
+        const btnLimpiar = document.getElementById('btnLimpiar');
+
+        function cargarCategorias() {
+            selectCategoria.innerHTML = '';
+            for (const key in datosApendiceG) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = datosApendiceG[key].nombre;
+                selectCategoria.appendChild(option);
+            }
+            actualizarUnidades();
+        }
+
+        function actualizarUnidades() {
+            const catKey = selectCategoria.value;
+            const unidades = datosApendiceG[catKey].unidades;
+
+            selectOrigen.innerHTML = '';
+            selectDestino.innerHTML = '';
+
+            let firstKey = null;
+            let secondKey = null;
+            let count = 0;
+
+            for (const uKey in unidades) {
+                if (count === 0) firstKey = uKey;
+                if (count === 1) secondKey = uKey;
+
+                const optOrigen = document.createElement('option');
+                optOrigen.value = uKey;
+                optOrigen.textContent = unidades[uKey].nombre;
+                selectOrigen.appendChild(optOrigen);
+
+                const optDestino = document.createElement('option');
+                optDestino.value = uKey;
+                optDestino.textContent = unidades[uKey].nombre;
+                selectDestino.appendChild(optDestino);
+
+                count++;
+            }
+
+            if (secondKey) {
+                selectDestino.value = secondKey;
+            }
+
+            calcular();
+        }
+
+        function calcular() {
+            const valStr = inputValor.value;
+            if (valStr === '' || isNaN(valStr)) {
+                pantallaResultado.textContent = "---";
+                return;
+            }
+
+            const valor = parseFloat(valStr);
+            const catKey = selectCategoria.value;
+            const uOrigenKey = selectOrigen.value;
+            const uDestinoKey = selectDestino.value;
+
+            const unidades = datosApendiceG[catKey].unidades;
+
+            const factorOrigen = unidades[uOrigenKey].factor;
+            const factorDestino = unidades[uDestinoKey].factor;
+
+            const valorEnBase = valor * factorOrigen;
+            const resultado = valorEnBase / factorDestino;
+
+            let resultadoFormateado;
+            if (Math.abs(resultado) < 0.0001 || Math.abs(resultado) >= 1000000) {
+                resultadoFormateado = resultado.toExponential(5);
+            } else {
+                resultadoFormateado = resultado.toLocaleString('es-ES', { maximumFractionDigits: 6 });
+            }
+
+            const nombreDestino = unidades[uDestinoKey].nombre;
+            pantallaResultado.textContent = `${resultadoFormateado} ${nombreDestino.split('(')[0].trim()}`;
+
+            const factorDirecto = factorOrigen / factorDestino;
+            let factorDirectoTexto = factorDirecto < 0.001 || factorDirecto > 10000 
+                ? factorDirecto.toExponential(4) 
+                : parseFloat(factorDirecto.toFixed(6));
+
+            detallesFormula.innerHTML = `
+                <svg class="w-4 h-4 mr-1.5 flex-shrink-0 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span>Factor de conversión: 1 unidad de origen = <strong>${factorDirectoTexto}</strong> unidades de destino.</span>
+            `;
+        }
+
+        function intercambiar() {
+            const temp = selectOrigen.value;
+            selectOrigen.value = selectDestino.value;
+            selectDestino.value = temp;
+            calcular();
+        }
+
+        function limpiar() {
+            inputValor.value = '1';
+            selectCategoria.selectedIndex = 0;
+            actualizarUnidades();
+        }
+
+        selectCategoria.addEventListener('change', actualizarUnidades);
+        inputValor.addEventListener('input', calcular);
+        selectOrigen.addEventListener('change', calcular);
+        selectDestino.addEventListener('change', calcular);
+        btnIntercambiar.addEventListener('click', intercambiar);
+        btnLimpiar.addEventListener('click', limpiar);
+
+        document.addEventListener('DOMContentLoaded', cargarCategorias);
+    </script>
+</body>
+</html>
